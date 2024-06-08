@@ -1,0 +1,12 @@
+require:
+  - rubocop-rake
+
+AllCops:
+  TargetRubyVersion: 3.2
+  NewCops: enable
+
+Gemspec/RequireMFA:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
