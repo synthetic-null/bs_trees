@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+- Added BSTrees::Base class
+- Added BSTrees::Helpers::PrintMethods
+- BSTrees::BST now is a subclass of BSTrees::Base
+- Major part of functionality has been moved from BSTrees::BST to BSTrees::Base
+- Some printing methods has been moved to helper module
+- BSTrees::BST#initialize\_copy is more safe now
 - Fixed binstubs
 - Fixed gemspec
 - Updated development dependencies

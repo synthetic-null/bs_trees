@@ -4,7 +4,7 @@ require 'bs_trees/bst'
 
 module BSTrees
   class AVL < BST
-    class Node < BST::Node
+    class Node < Base::Node
       attr_accessor :height
 
       def initialize(*)

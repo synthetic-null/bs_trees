@@ -2,6 +2,11 @@
 
 This is a Ruby gem that implements binary search and AVL trees.
 
+## WARNING!
+
+This gem was created in educational purposes and is not intended for use in production.
+And therefore, it was not published on RubyGems.
+
 ## Installation
 
 Install the gem and add to the application's Gemfile by executing:

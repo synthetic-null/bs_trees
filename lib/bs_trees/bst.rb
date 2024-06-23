@@ -1,40 +1,9 @@
 # frozen_string_literal: true
 
-require 'bs_trees/helpers/freezeable'
+require 'bs_trees/base'
 
 module BSTrees
-  class BST # rubocop:disable Metrics/ClassLength
-    class Node
-      attr_accessor :object,
-                    :left,
-                    :right
-
-      def initialize(object,
-                     left = nil,
-                     right = nil)
-
-        self.object = object
-        self.left = left
-        self.right = right
-      end
-
-      def height
-        1 + [lheight, rheight].max
-      end
-
-      def lheight
-        left.nil? ? -1 : left.height
-      end
-
-      def rheight
-        right.nil? ? -1 : right.height
-      end
-    end
-
-    include Enumerable
-
-    include Helpers::Freezeable
-
+  class BST < Base # rubocop:disable Metrics/ClassLength
     def self.[](*objects)
       instance = new
 
@@ -45,12 +14,8 @@ module BSTrees
       instance
     end
 
-    attr_reader :size
-    alias length size
-
     def initialize(enum = nil)
-      self.root = nil
-      self.size = 0
+      super()
 
       insert_each enum
     end
@@ -63,21 +28,7 @@ module BSTrees
               "argument must be a kind of #{BST}"
       end
 
-      unless other.equal? self
-        clear
-
-        other.each_preorder { |object| insert object }
-      end
-
-      self
-    end
-    alias replace initialize_copy
-    public :replace
-
-    def ==(other)
-      other.instance_of?(self.class) &&
-        other.size == size &&
-        other.all? { |object| include? object }
+      safe_initialize_copy!(other)
     end
 
     def [](object) = get object
@@ -95,54 +46,6 @@ module BSTrees
     else
       !node.nil?
     end
-
-    def empty? = root.nil?
-
-    def height
-      root.nil? ? 0 : root.height
-    end
-
-    def each_inorder(&)
-      if block_given?
-        _each_inorder(root, &)
-
-        self
-      else
-        enum_for(__method__) { size }
-      end
-    end
-    alias each each_inorder
-
-    def each_preorder(&)
-      if block_given?
-        _each_preorder(root, &)
-
-        self
-      else
-        enum_for(__method__) { size }
-      end
-    end
-
-    def each_postorder(&)
-      if block_given?
-        _each_postorder(root, &)
-
-        self
-      else
-        enum_for(__method__) { size }
-      end
-    end
-
-    def reverse_each_inorder(&)
-      if block_given?
-        _reverse_each_inorder(root, &)
-
-        self
-      else
-        enum_for(__method__) { size }
-      end
-    end
-    alias reverse_each reverse_each_inorder
 
     def insert_each(enum)
       traverse(enum) { |object| insert object }
@@ -190,72 +93,26 @@ module BSTrees
       node.object
     end
 
-    def clear
-      raise_frozen_error if frozen?
-
-      self.root = nil
-      self.size = 0
+    def replace(other)
+      initialize_copy other
 
       self
     end
 
-    def to_s
-      "#<#{self.class}: {#{to_a.join(', ')}}>"
-    end
-    alias inspect to_s
-
-    def pretty_print(pp) # :nodoc:
-      pp.group(1, "#<#{self.class}:", '>') do
-        pp.breakable
-
-        pp.group(1, '{', '}') do
-          pp.seplist(self) do |object|
-            pp.pp object
-          end
-        end
-      end
-    end
-
-    def pretty_print_cycle(pp) # :nodoc:
-      pp.text "#<#{self.class}: {#{'...' unless empty?}}>"
-    end
-
     private
 
-    attr_accessor :root
+    def safe_initialize_copy!(other)
+      old_root = root
+      old_size = size
 
-    attr_writer :size
+      clear
 
-    def _each_inorder(node, &)
-      return if node.nil?
-
-      _each_inorder(node.left, &)
-      yield node.object
-      _each_inorder(node.right, &)
-    end
-
-    def _each_preorder(node, &)
-      return if node.nil?
-
-      yield node.object
-      _each_preorder(node.left, &)
-      _each_preorder(node.right, &)
-    end
-
-    def _each_postorder(node, &)
-      return if node.nil?
-
-      _each_postorder(node.left, &)
-      _each_postorder(node.right, &)
-      yield node.object
-    end
-
-    def _reverse_each_inorder(node, &)
-      return if node.nil?
-
-      _reverse_each_inorder(node.right, &)
-      yield node.object
-      _reverse_each_inorder(node.left, &)
+      other.each_preorder { |object| insert object }
+    rescue StandardError
+      self.root = old_root
+      self.size = old_size
+    else
+      self
     end
 
     def traverse(enum, &)
