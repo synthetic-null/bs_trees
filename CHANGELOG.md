@@ -1,5 +1,6 @@
 ## [Unreleased]
 
+- Removed autoload feature
 - Added BSTrees::Base class
 - Added BSTrees::Helpers::PrintMethods
 - BSTrees::BST now is a subclass of BSTrees::Base
