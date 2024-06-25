@@ -3,10 +3,10 @@
 module BSTrees
   module Helpers
     module PrintMethods
-      def to_s
-        "#<#{self.class}: {#{to_a.join(', ')}}>"
+      def inspect
+        "#<#{self.class}: {#{to_a.inspect[1..-2]}}>"
       end
-      alias inspect to_s
+      alias to_s inspect
 
       def pretty_print(pp) # :nodoc:
         pp.group(1, "#<#{self.class}:", '>') do
