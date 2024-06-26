@@ -1,5 +1,6 @@
 require:
   - rubocop-rake
+  - rubocop-rspec
 
 AllCops:
   TargetRubyVersion: 3.2
@@ -12,4 +13,8 @@ Gemspec/RequireMFA:
   Enabled: false
 
 Style/Documentation:
+  Enabled: false
+
+# RSpec
+RSpec/NestedGroups:
   Enabled: false
