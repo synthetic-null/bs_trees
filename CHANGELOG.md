@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+## [0.2.0] - 2024-06-28
+
 - Added RSpec and corresponding specs
 - Added BSTrees::Base class
 - Added BSTrees::Helpers::PrintMethods

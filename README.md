@@ -14,6 +14,12 @@ Install the gem and add to the application's Gemfile by executing:
 bundle add bs_trees --github "synthetic-null/bs_trees"
 ```
 
+If bundler is not being used to manage dependencies, first you must download the gem and then install it by executing:
+
+```shell
+gem install bs_trees-0.2.0.gem
+```
+
 ## Usage
 ### Semantics
 
